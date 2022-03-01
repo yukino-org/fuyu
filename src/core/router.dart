@@ -3,6 +3,10 @@ import '../routes/_handlers/not_found.dart';
 import '../routes/anime/info.dart';
 import '../routes/anime/search.dart';
 import '../routes/anime/sources.dart';
+import '../routes/manga/chapter.dart';
+import '../routes/manga/info.dart';
+import '../routes/manga/page.dart';
+import '../routes/manga/search.dart';
 import '../routes/ping.dart';
 
 export 'package:shelf_router/shelf_router.dart';
@@ -16,6 +20,10 @@ abstract class RouteManager {
     animeSearch,
     animeInfo,
     animeSources,
+    mangaSearch,
+    mangaInfo,
+    mangaChapter,
+    mangaPage,
     ping,
   ];
 

@@ -7,13 +7,18 @@ import 'response.dart';
 class TenkaQuery<T> {
   const TenkaQuery._({
     required this.type,
+    required this.metadata,
     required this.extractor,
     required this.locale,
   });
 
   final TenkaType type;
+  final TenkaMetadata metadata;
   final T extractor;
   final Locale locale;
+
+  String getCacheKey(final String key) =>
+      '${type.name}_${metadata.id}_${locale.toCodeString()}_$key';
 
   static Future<dynamic> parse<T>({
     required final Request request,
@@ -50,6 +55,7 @@ class TenkaQuery<T> {
 
     return TenkaQuery<T>._(
       type: type,
+      metadata: metadata,
       extractor: extractor,
       locale: locale,
     );

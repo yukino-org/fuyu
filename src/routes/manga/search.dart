@@ -7,25 +7,25 @@ import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
-final RouteFactory animeSearch =
+final RouteFactory mangaSearch =
     createRouteFactory((final Router router) async {
   router.get(
-    '/anime/search',
+    '/manga/search',
     (final Request request) async {
       final String? terms = request.url.queryParameters['terms'];
       if (terms == null) {
         return ResponseUtils.missingQuery('terms');
       }
 
-      final dynamic parsedQuery = await TenkaQuery.parse<AnimeExtractor>(
+      final dynamic parsedQuery = await TenkaQuery.parse<MangaExtractor>(
         request: request,
-        type: TenkaType.anime,
+        type: TenkaType.manga,
       );
 
       if (parsedQuery is Response) return parsedQuery;
 
-      final TenkaQuery<AnimeExtractor> castedQuery =
-          parsedQuery as TenkaQuery<AnimeExtractor>;
+      final TenkaQuery<MangaExtractor> castedQuery =
+          parsedQuery as TenkaQuery<MangaExtractor>;
 
       final String cKey = castedQuery.getCacheKey('search_$terms');
 

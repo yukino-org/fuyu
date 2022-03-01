@@ -7,51 +7,57 @@ import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
-final RouteFactory animeSearch =
+final RouteFactory mangaChapter =
     createRouteFactory((final Router router) async {
   router.get(
-    '/anime/search',
+    '/manga/chapter',
     (final Request request) async {
-      final String? terms = request.url.queryParameters['terms'];
-      if (terms == null) {
-        return ResponseUtils.missingQuery('terms');
+      final String? url = request.url.queryParameters['url'];
+      if (url == null) {
+        return ResponseUtils.missingQuery('url');
       }
 
-      final dynamic parsedQuery = await TenkaQuery.parse<AnimeExtractor>(
+      final dynamic parsedQuery = await TenkaQuery.parse<MangaExtractor>(
         request: request,
-        type: TenkaType.anime,
+        type: TenkaType.manga,
       );
 
       if (parsedQuery is Response) return parsedQuery;
 
-      final TenkaQuery<AnimeExtractor> castedQuery =
-          parsedQuery as TenkaQuery<AnimeExtractor>;
+      final TenkaQuery<MangaExtractor> castedQuery =
+          parsedQuery as TenkaQuery<MangaExtractor>;
 
-      final String cKey = castedQuery.getCacheKey('search_$terms');
+      final String cKey = castedQuery.getCacheKey('chapter_$url');
 
       try {
         int statusCode = StatusCodes.ok;
         final Map<String, String> headers =
             getDefaultHeaders(contentType: ContentType.json);
 
-        final List<SearchInfo> results;
-        final CacheData<List<SearchInfo>>? cached =
-            Cache.get<List<SearchInfo>>(cKey);
+        final List<PageInfo> results;
+        final CacheData<List<PageInfo>>? cached =
+            Cache.get<List<PageInfo>>(cKey);
 
         if (cached != null) {
           results = cached.data;
           statusCode = StatusCodes.notModified;
           cached.setCacheHeaders(headers);
         } else {
-          results =
-              await castedQuery.extractor.search(terms, castedQuery.locale);
-          Cache.set<List<SearchInfo>>(cKey, results);
+          results = await castedQuery.extractor.getChapter(
+            ChapterInfo(
+              // NOTE: not a big issue
+              chapter: '0',
+              url: url,
+              locale: castedQuery.locale,
+            ),
+          );
+          Cache.set<List<PageInfo>>(cKey, results);
         }
 
         return Response(
           statusCode,
           body: JsonResponse.success(
-            results.map((final SearchInfo x) => x.toJson()).toList(),
+            results.map((final PageInfo x) => x.toJson()).toList(),
           ),
           headers: headers,
         );

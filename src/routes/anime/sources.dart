@@ -1,6 +1,9 @@
 import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
+import '../../core/cache.dart';
 import '../../core/router.dart';
+import '../../tools/http.dart';
+import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
@@ -24,23 +27,42 @@ final RouteFactory animeSources =
       final TenkaQuery<AnimeExtractor> castedQuery =
           parsedQuery as TenkaQuery<AnimeExtractor>;
 
-      try {
-        final List<EpisodeSource> results =
-            await castedQuery.extractor.getSources(
-          EpisodeInfo(
-            // NOTE: not a big issue
-            episode: '0',
-            url: url,
-            locale: castedQuery.locale,
-          ),
-        );
+      final String cKey = castedQuery.getCacheKey('sources_$url');
 
-        return Response.ok(
-          JsonResponse.success(
+      try {
+        int statusCode = StatusCodes.ok;
+        final Map<String, String> headers =
+            getDefaultHeaders(contentType: ContentType.json);
+
+        final List<EpisodeSource> results;
+        final CacheData<List<EpisodeSource>>? cached =
+            Cache.get<List<EpisodeSource>>(cKey);
+
+        if (cached != null) {
+          results = cached.data;
+          statusCode = StatusCodes.notModified;
+          cached.setCacheHeaders(headers);
+        } else {
+          results = await castedQuery.extractor.getSources(
+            EpisodeInfo(
+              // NOTE: not a big issue
+              episode: '0',
+              url: url,
+              locale: castedQuery.locale,
+            ),
+          );
+          Cache.set<List<EpisodeSource>>(cKey, results);
+        }
+
+        return Response(
+          statusCode,
+          body: JsonResponse.success(
             results.map((final EpisodeSource x) => x.toJson()).toList(),
           ),
+          headers: headers,
         );
       } catch (err) {
+        Logger.error('response: Failed $err (${request.url}}');
         return Response.internalServerError(
           body: JsonResponse.fail('Something went wrong'),
         );
