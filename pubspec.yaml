@@ -1,5 +1,5 @@
 name: fuyu
-description: A server app using the shelf package and Docker.
+description: "🏂 Self-hostable http API server for Tenka."
 version: 1.0.0
 
 publish_to: none
