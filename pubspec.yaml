@@ -30,6 +30,4 @@ dev_dependencies:
         git:
             url: git://github.com/yukino-org/packages.git
             ref: dart_devx
-    http: ^0.13.0
     test: ^1.15.0
-    test_process: ^2.0.0

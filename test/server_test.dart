@@ -1,5 +1,4 @@
 import 'dart:convert';
-// import 'package:http/http.dart';
 import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
 import 'package:test/test.dart';
@@ -9,7 +8,7 @@ import '../src/main.dart' as server;
 const String host = '127.0.0.1';
 const int port = 8080;
 const Map<TenkaType, String> modules = <TenkaType, String>{
-  TenkaType.anime: 'gogoanime.pe',
+  TenkaType.anime: 'twist.moe',
   TenkaType.manga: 'mangadex.org',
 };
 
