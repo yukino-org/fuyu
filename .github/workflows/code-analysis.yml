@@ -43,6 +43,5 @@ jobs:
             - name: 🩺 Analyze code
               run: dart analyze
 
-            # Doesn't seem to work on actions
-            # - name: 🧪 Run tests
-            #   run: dart test ./test/server_test.dart
+            - name: 🧪 Run tests
+              run: dart test ./test/server_test.dart

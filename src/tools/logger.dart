@@ -11,6 +11,10 @@ abstract class Logger {
     _print('[$time DBUG] $text');
   }
 
+  static void warn(final String text) {
+    _print('[$time WARN] $text');
+  }
+
   static void error(final String text) {
     _print('[$time ERR!] $text');
   }

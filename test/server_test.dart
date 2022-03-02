@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:http/http.dart';
+// import 'package:http/http.dart';
+import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
 import 'package:test/test.dart';
 import '../src/core/app.dart' as server;
@@ -25,6 +26,7 @@ void main() {
         '--modules',
         modules.values.join(','),
         '--suppress',
+        '--no-listen',
       ],
     );
   });
@@ -42,7 +44,7 @@ void main() {
     final Map<String, String> urls = <String, String>{};
 
     test('/anime/search', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/anime/search', <String, String>{
           'terms': 'bunny girl',
           ...defaultQuery,
@@ -50,7 +52,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () {
@@ -67,7 +69,7 @@ void main() {
     });
 
     test('/anime/info', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/anime/info', <String, String>{
           'url': urls['anime']!,
           ...defaultQuery,
@@ -75,7 +77,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () {
@@ -91,7 +93,7 @@ void main() {
     });
 
     test('/anime/sources', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/anime/sources', <String, String>{
           'url': urls['episode']!,
           ...defaultQuery,
@@ -99,7 +101,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () => EpisodeSource.fromJson(
@@ -121,7 +123,7 @@ void main() {
     final Map<String, String> urls = <String, String>{};
 
     test('/manga/search', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/manga/search', <String, String>{
           'terms': 'bunny girl',
           ...defaultQuery,
@@ -129,7 +131,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () {
@@ -146,7 +148,7 @@ void main() {
     });
 
     test('/manga/info', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/manga/info', <String, String>{
           'url': urls['manga']!,
           ...defaultQuery,
@@ -154,7 +156,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () {
@@ -170,7 +172,7 @@ void main() {
     });
 
     test('/manga/chapter', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/manga/chapter', <String, String>{
           'url': urls['chapter']!,
           ...defaultQuery,
@@ -178,7 +180,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () {
@@ -195,7 +197,7 @@ void main() {
     });
 
     test('/manga/page', () async {
-      final Response response = await get(
+      final Response response = await request(
         getURI('/manga/page', <String, String>{
           'url': urls['page']!,
           ...defaultQuery,
@@ -203,7 +205,7 @@ void main() {
       );
 
       expect(
-        isSuccessResponse(
+        await isSuccessResponse(
           response,
           (final dynamic data) => tryCatchBool(
             () => ImageDescriber.fromJson(data as Map<dynamic, dynamic>),
@@ -223,12 +225,12 @@ Uri getURI(final String route, final Map<String, String> query) => Uri(
       queryParameters: query,
     );
 
-bool isSuccessResponse(
+Future<bool> isSuccessResponse(
   final Response response,
   final bool Function(dynamic) isValid,
-) {
+) async {
   final Map<dynamic, dynamic> parsed =
-      json.decode(response.body) as Map<dynamic, dynamic>;
+      json.decode(await response.readAsString()) as Map<dynamic, dynamic>;
 
   return <int>[200, 304].contains(response.statusCode) &&
       parsed['success'] as bool &&
@@ -243,3 +245,9 @@ bool tryCatchBool(final void Function() fn) {
     return false;
   }
 }
+
+Future<Response> request(
+  final Uri uri, {
+  final String method = 'get',
+}) async =>
+    server.AppManager.router.router.call(Request(method, uri));

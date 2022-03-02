@@ -38,10 +38,16 @@ Future<void> main(final List<String> args) async {
   ).addHandler(AppManager.router.router);
   Logger.debug('main: Prepared handler');
 
-  AppManager.server = await serve(handler, host, port);
-  Logger.debug('main: Started server');
+  if (AppManager.argResults['listen'] as bool) {
+    AppManager.server = await serve(handler, host, port);
+    Logger.debug('main: Started server');
 
-  Logger.info(
-    'server: Serving at http://${AppManager.server.address.host}:${AppManager.server.port}/',
-  );
+    Logger.info(
+      'server: Serving at http://${AppManager.server.address.host}:${AppManager.server.port}/',
+    );
+  } else {
+    Logger.warn(
+      'server: On mock mode due to --no-listen flag',
+    );
+  }
 }
