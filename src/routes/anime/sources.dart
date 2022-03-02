@@ -2,13 +2,37 @@ import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
 import '../../core/cache.dart';
 import '../../core/router.dart';
+import '../../tools/docs/api.dart';
+import '../../tools/docs/datatype.dart';
+import '../../tools/docs/predefined/schemas/anime/episode/source.dart';
+import '../../tools/docs/predefined/schemas/json_response.dart';
 import '../../tools/http.dart';
 import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
 final RouteFactory animeSources =
-    createRouteFactory((final Router router) async {
+    createRouteFactory((final Router router, final ApiDocs docs) async {
+  docs.addRoute(
+    ApiRoute(
+      heading: 'Get Anime Episode Sources',
+      method: ApiRouteMethod.get,
+      path: '/anime/sources?url={url}&${TenkaQuery.parseQuery}',
+      descripton: 'Get sources of an anime episode.',
+      keys: <ApiRouteKey>[
+        ApiRouteKey(
+          name: 'url',
+          description: 'URL of an anime episode.',
+          datatype: SchemaDataType.string(),
+        ),
+        ...TenkaQuery.parseQueryKeys,
+      ],
+      successResponse:
+          getJsonResponse(SchemaDataType.array(episodeSourceSchemaDataType)),
+      failResponse: getFailJsonResponse(),
+    ),
+  );
+
   router.get(
     '/anime/sources',
     (final Request request) async {
@@ -17,10 +41,8 @@ final RouteFactory animeSources =
         return ResponseUtils.missingQuery('url');
       }
 
-      final dynamic parsedQuery = await TenkaQuery.parse<AnimeExtractor>(
-        request: request,
-        type: TenkaType.anime,
-      );
+      final dynamic parsedQuery =
+          await TenkaQuery.parse<AnimeExtractor>(request);
 
       if (parsedQuery is Response) return parsedQuery;
 
@@ -64,7 +86,7 @@ final RouteFactory animeSources =
       } catch (err) {
         Logger.error('response: Failed $err (${request.url}}');
         return Response.internalServerError(
-          body: JsonResponse.fail('Something went wrong'),
+          body: JsonResponse.somethingWentWrong,
         );
       }
     },

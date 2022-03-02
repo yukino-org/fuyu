@@ -24,4 +24,5 @@ class ContentType {
       };
 
   static const ContentType json = ContentType('application/json');
+  static const ContentType html = ContentType('text/html');
 }

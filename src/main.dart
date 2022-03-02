@@ -13,12 +13,12 @@ Future<void> main(final List<String> args) async {
 
   final InternetAddress host =
       InternetAddress(AppManager.argResults['host'] as String);
-  Logger.debug('main: host - ${host.address}');
+  Logger.debug('main: host - ${host.host}');
 
   final int port = int.parse(AppManager.argResults['port'] as String);
   Logger.debug('main: port - $port');
 
-  final Router router = await RouteManager.createRouter();
+  AppManager.router = await RouteManager.createRouter();
   Logger.debug('main: Created router');
 
   final Handler handler = const Pipeline().addMiddleware(
@@ -35,13 +35,13 @@ Future<void> main(final List<String> args) async {
         }
       },
     ),
-  ).addHandler(router);
+  ).addHandler(AppManager.router.router);
   Logger.debug('main: Prepared handler');
 
-  final HttpServer server = await serve(handler, host, port);
+  AppManager.server = await serve(handler, host, port);
   Logger.debug('main: Started server');
 
   Logger.info(
-    'server: Listening on port http://${server.address.address}:${server.port}',
+    'server: Serving at http://${AppManager.server.address.host}:${AppManager.server.port}/',
   );
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:args/args.dart';
+import 'router.dart';
 import 'tenka.dart';
 
 abstract class AppManager {
@@ -8,6 +9,9 @@ abstract class AppManager {
   static bool disposed = false;
 
   static late ArgResults argResults;
+  static late HttpServer server;
+  static late RouteManager router;
+
   static StreamSubscription<ProcessSignal>? sigintSubscription;
   static final List<Future<void>> pendingCriticals = <Future<void>>[];
 

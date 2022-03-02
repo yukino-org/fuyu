@@ -30,6 +30,11 @@ class JsonResponse {
         state: JsonResponseState.fail,
         data: data,
       ).body;
+
+  static String get somethingWentWrong => const JsonResponse._(
+        state: JsonResponseState.fail,
+        data: 'Something went wrong.',
+      ).body;
 }
 
 abstract class ResponseUtils {

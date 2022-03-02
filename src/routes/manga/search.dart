@@ -2,13 +2,37 @@ import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
 import '../../core/cache.dart';
 import '../../core/router.dart';
+import '../../tools/docs/api.dart';
+import '../../tools/docs/datatype.dart';
+import '../../tools/docs/predefined/schemas/json_response.dart';
+import '../../tools/docs/predefined/schemas/search/info.dart';
 import '../../tools/http.dart';
 import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
 final RouteFactory mangaSearch =
-    createRouteFactory((final Router router) async {
+    createRouteFactory((final Router router, final ApiDocs docs) async {
+  docs.addRoute(
+    ApiRoute(
+      heading: 'Search Manga',
+      method: ApiRouteMethod.get,
+      path: '/manga/search?terms={terms}&${TenkaQuery.parseQuery}',
+      descripton: 'Search for a manga.',
+      keys: <ApiRouteKey>[
+        ApiRouteKey(
+          name: 'terms',
+          description: 'Search terms to search a manga.',
+          datatype: SchemaDataType.string(),
+        ),
+        ...TenkaQuery.parseQueryKeys,
+      ],
+      successResponse:
+          getJsonResponse(SchemaDataType.array(searchInfoSchemaDataType)),
+      failResponse: getFailJsonResponse(),
+    ),
+  );
+
   router.get(
     '/manga/search',
     (final Request request) async {
@@ -17,10 +41,8 @@ final RouteFactory mangaSearch =
         return ResponseUtils.missingQuery('terms');
       }
 
-      final dynamic parsedQuery = await TenkaQuery.parse<MangaExtractor>(
-        request: request,
-        type: TenkaType.manga,
-      );
+      final dynamic parsedQuery =
+          await TenkaQuery.parse<MangaExtractor>(request);
 
       if (parsedQuery is Response) return parsedQuery;
 
@@ -58,7 +80,7 @@ final RouteFactory mangaSearch =
       } catch (err) {
         Logger.error('response: Failed $err (${request.url}}');
         return Response.internalServerError(
-          body: JsonResponse.fail('Something went wrong'),
+          body: JsonResponse.somethingWentWrong,
         );
       }
     },

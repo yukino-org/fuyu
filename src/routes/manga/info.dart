@@ -2,12 +2,36 @@ import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
 import '../../core/cache.dart';
 import '../../core/router.dart';
+import '../../tools/docs/api.dart';
+import '../../tools/docs/datatype.dart';
+import '../../tools/docs/predefined/schemas/json_response.dart';
+import '../../tools/docs/predefined/schemas/manga/info.dart';
 import '../../tools/http.dart';
 import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
 
-final RouteFactory mangaInfo = createRouteFactory((final Router router) async {
+final RouteFactory mangaInfo =
+    createRouteFactory((final Router router, final ApiDocs docs) async {
+  docs.addRoute(
+    ApiRoute(
+      heading: 'Get Manga Information',
+      method: ApiRouteMethod.get,
+      path: '/manga/info?url={url}&${TenkaQuery.parseQuery}',
+      descripton: 'Get information about a manga.',
+      keys: <ApiRouteKey>[
+        ApiRouteKey(
+          name: 'url',
+          description: 'URL of a manga.',
+          datatype: SchemaDataType.string(),
+        ),
+        ...TenkaQuery.parseQueryKeys,
+      ],
+      successResponse: getJsonResponse(mangaInfoSchemaDataType),
+      failResponse: getFailJsonResponse(),
+    ),
+  );
+
   router.get(
     '/manga/info',
     (final Request request) async {
@@ -16,10 +40,8 @@ final RouteFactory mangaInfo = createRouteFactory((final Router router) async {
         return ResponseUtils.missingQuery('url');
       }
 
-      final dynamic parsedQuery = await TenkaQuery.parse<MangaExtractor>(
-        request: request,
-        type: TenkaType.manga,
-      );
+      final dynamic parsedQuery =
+          await TenkaQuery.parse<MangaExtractor>(request);
 
       if (parsedQuery is Response) return parsedQuery;
 
@@ -53,7 +75,7 @@ final RouteFactory mangaInfo = createRouteFactory((final Router router) async {
       } catch (err) {
         Logger.error('response: Failed $err (${request.url}}');
         return Response.internalServerError(
-          body: JsonResponse.fail('Something went wrong'),
+          body: JsonResponse.somethingWentWrong,
         );
       }
     },

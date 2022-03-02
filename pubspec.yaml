@@ -1,5 +1,5 @@
 name: fuyu
-description: "🏂 Self-hostable http API server for Tenka."
+description: "🏂 A self-hostable rest api server for Tenka."
 version: 1.0.0
 
 publish_to: none

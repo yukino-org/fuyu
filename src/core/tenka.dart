@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:tenka/tenka.dart';
-import 'package:utilx/utilities/locale.dart';
 import 'package:utilx_desktop/utilities/webview/providers/puppeteer/provider.dart';
 import '../config/constants.dart';
 import '../config/paths.dart';
@@ -34,6 +35,12 @@ abstract class TenkaManager {
       ),
     );
 
+    // Remove all installed modules
+    final Directory tenkaBaseDir = Directory(Paths.tenka);
+    if (await tenkaBaseDir.exists()) {
+      await tenkaBaseDir.delete(recursive: true);
+    }
+
     repository = TenkaRepository(
       resolver:
           const TenkaStoreURLResolver(deployMode: Constants.tenkaStoreRef),
@@ -66,9 +73,4 @@ abstract class TenkaManager {
   static Future<void> dispose() async {
     await TenkaInternals.dispose();
   }
-
-  static Locale get defaultLocale =>
-      AppManager.argResults.wasParsed('defaultLocale')
-          ? Locale.parse(AppManager.argResults['defaultLocale'] as String)
-          : const Locale(LanguageCodes.en);
 }
