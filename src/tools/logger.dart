@@ -1,16 +1,24 @@
 // ignore_for_file: avoid_print
 
+import '../core/app.dart';
+
 abstract class Logger {
   static void info(final String text) {
-    print('[$time INFO] $text');
+    _print('[$time INFO] $text');
   }
 
   static void debug(final String text) {
-    print('[$time DBUG] $text');
+    _print('[$time DBUG] $text');
   }
 
   static void error(final String text) {
-    print('[$time ERR!] $text');
+    _print('[$time ERR!] $text');
+  }
+
+  static void _print(final String text) {
+    if (!(AppManager.argResults['suppress'] as bool)) {
+      print(text);
+    }
   }
 
   static String get time {

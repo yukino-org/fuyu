@@ -4,4 +4,5 @@ final ArgParser argParser = ArgParser()
   ..addOption('host', mandatory: true)
   ..addOption('port', mandatory: true)
   ..addMultiOption('modules')
-  ..addOption('defaultLocale');
+  ..addOption('defaultLocale')
+  ..addFlag('suppress');

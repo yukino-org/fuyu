@@ -32,7 +32,16 @@ jobs:
                   dart run ./cli/generate_meta.dart
 
             - name: 🩺 Check code format
-              run: dart format --output=none --set-exit-if-changed .
+              run: |
+                  find . -name '*.dart' \
+                      ! -name '*.g.dart' \
+                      ! -name '*.freezed.dart' \
+                      ! -path '*/l10n/*' \
+                      ! -path "*/.*/*" \
+                      | xargs dart format --set-exit-if-changed
 
             - name: 🩺 Analyze code
               run: dart analyze
+
+            - name: 🧪 Run tests
+              run: dart test ./test/server_test.dart
