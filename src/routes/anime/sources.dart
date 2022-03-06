@@ -65,14 +65,8 @@ final RouteFactory animeSources =
           statusCode = StatusCodes.notModified;
           cached.setCacheHeaders(headers);
         } else {
-          results = await castedQuery.extractor.getSources(
-            EpisodeInfo(
-              // NOTE: not a big issue
-              episode: '0',
-              url: url,
-              locale: castedQuery.locale,
-            ),
-          );
+          results =
+              await castedQuery.extractor.getSources(url, castedQuery.locale);
           Cache.set<List<EpisodeSource>>(cKey, results);
         }
 

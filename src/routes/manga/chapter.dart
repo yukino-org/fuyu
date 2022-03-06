@@ -65,14 +65,8 @@ final RouteFactory mangaChapter =
           statusCode = StatusCodes.notModified;
           cached.setCacheHeaders(headers);
         } else {
-          results = await castedQuery.extractor.getChapter(
-            ChapterInfo(
-              // NOTE: not a big issue
-              chapter: '0',
-              url: url,
-              locale: castedQuery.locale,
-            ),
-          );
+          results =
+              await castedQuery.extractor.getChapter(url, castedQuery.locale);
           Cache.set<List<PageInfo>>(cKey, results);
         }
 

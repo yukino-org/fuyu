@@ -1,6 +1,6 @@
 import 'package:shelf/shelf.dart';
 import 'package:tenka/tenka.dart';
-import 'package:utilx/utilities/locale.dart';
+import 'package:utilx/locale.dart';
 import '../core/tenka.dart';
 import 'docs/api.dart';
 import 'docs/datatype.dart';

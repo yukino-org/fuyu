@@ -64,8 +64,7 @@ final RouteFactory mangaPage =
           statusCode = StatusCodes.notModified;
           cached.setCacheHeaders(headers);
         } else {
-          result = await castedQuery.extractor
-              .getPage(PageInfo(url: url, locale: castedQuery.locale));
+          result = await castedQuery.extractor.getPage(url, castedQuery.locale);
           Cache.set<ImageDescriber>(cKey, result);
         }
 
