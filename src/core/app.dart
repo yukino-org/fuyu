@@ -4,11 +4,23 @@ import 'package:args/args.dart';
 import 'router.dart';
 import 'tenka.dart';
 
+class ServerAddress {
+  const ServerAddress(this.protocol, this.host, this.port);
+
+  final String protocol;
+  final String host;
+  final int port;
+
+  String get url => '$protocol://$host:$port';
+  Uri get uri => Uri.parse(url);
+}
+
 abstract class AppManager {
   static bool initialized = false;
   static bool disposed = false;
 
   static late ArgResults argResults;
+  static late ServerAddress address;
   static late HttpServer server;
   static late RouteManager router;
 

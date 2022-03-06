@@ -4,12 +4,13 @@ import '../../core/cache.dart';
 import '../../core/router.dart';
 import '../../tools/docs/api.dart';
 import '../../tools/docs/datatype.dart';
-import '../../tools/docs/predefined/schemas/image_describer.dart';
+import '../../tools/docs/predefined/schemas/image_describer_proxy.dart';
 import '../../tools/docs/predefined/schemas/json_response.dart';
 import '../../tools/http.dart';
 import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
+import '../proxy.dart';
 
 final RouteFactory mangaPage =
     createRouteFactory((final Router router, final ApiDocs docs) async {
@@ -27,7 +28,7 @@ final RouteFactory mangaPage =
         ),
         ...TenkaQuery.parseQueryKeys,
       ],
-      successResponse: getJsonResponse(imageDescriberSchemaDataType),
+      successResponse: getJsonResponse(imageDescriberProxySchemaDataType),
       failResponse: getFailJsonResponse(),
     ),
   );
@@ -70,7 +71,12 @@ final RouteFactory mangaPage =
 
         return Response(
           statusCode,
-          body: JsonResponse.success(result.toJson()),
+          body: JsonResponse.success(
+            result.toJson()
+              ..addAll(<dynamic, dynamic>{
+                'proxied_url': getProxiedURL(result.url, result.headers),
+              }),
+          ),
           headers: headers,
         );
       } catch (err) {

@@ -9,6 +9,7 @@ environment:
 
 dependencies:
     args: ^2.0.0
+    dl: ^1.0.6
     path: ^1.8.1
     shelf: ^1.1.0
     shelf_router: ^1.0.0

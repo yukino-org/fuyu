@@ -115,6 +115,13 @@ packages:
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "0.0.0"
+  dl:
+    dependency: "direct main"
+    description:
+      name: dl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   encrypt:
     dependency: transitive
     description:

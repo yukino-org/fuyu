@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:tenka/tenka.dart';
 import '../../config/meta.dart';
+import '../../core/app.dart';
 import '../../core/tenka.dart';
 import 'api.dart';
 
@@ -8,30 +9,13 @@ String getHtmlDocumentation(final ApiDocs docs) {
   final String title =
       _esc('${AppMeta.name} v${AppMeta.version} - Documentation');
 
-  final String note = _md(
-    'Note: A success response has `success` as `true` and a failed response has `success` as `false`.',
-  );
-
-  final String modules = TenkaManager.repository.installed.values
-      .map(
-        (final TenkaMetadata x) =>
-            '<li>${x.name} (<code>${x.name.toLowerCase()}</code>)</li>',
-      )
-      .join('\n');
-
-  final String toc = docs.routes
-      .map(
-        (final ApiRoute x) =>
-            '<li><a href="#${_headingToId(x.heading)}">${_esc(x.heading)}</a></li>',
-      )
-      .join('\n');
-
   return '''
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="favicon.png" />
     <title>$title</title>
 
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=DM+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -49,16 +33,26 @@ String getHtmlDocumentation(final ApiDocs docs) {
         <div>
           <h2>Available Modules</h2>
           <ul>
-            $modules
+            ${TenkaManager.repository.installed.values.map(
+            (final TenkaMetadata x) =>
+                '<li>${x.name} v${x.version} (<code>${x.name.toLowerCase()}</code>)</li>',
+          ).join('\n')}
           </ul>          
         </div>
 
         <div id="endpoints">
           <h2>Endpoints</h1>
+          <p>Base URL: <code>${AppManager.address.url}</code></p>
           <ul>
-            $toc
+            ${docs.routes.map(
+            (final ApiRoute x) =>
+                '<li><a href="#${_headingToId(x.heading)}">${_esc(x.heading)}</a></li>',
+          ).join('\n')}
           </ul>
-          <p>$note</p>
+
+          <p>
+            Note: A success response has <code>success</code> as <code>true</code> and a failed response has <code>success</code> as <code>false</code>.
+          </p>
 
           ${docs.routes.map(
             (final ApiRoute x) => '''
@@ -103,7 +97,7 @@ String getHtmlDocumentation(final ApiDocs docs) {
 
   <style>
     :root {
-      --primary-color: #fa6520;
+      --primary-color: #A20669;
       --text-color: #262626;
       --secondary-text-color: #424242;
       --code-color: #e6e6e6;

@@ -10,6 +10,7 @@ import '../../tools/http.dart';
 import '../../tools/logger.dart';
 import '../../tools/response.dart';
 import '../../tools/utils.dart';
+import '../proxy.dart';
 
 final RouteFactory animeSources =
     createRouteFactory((final Router router, final ApiDocs docs) async {
@@ -73,7 +74,14 @@ final RouteFactory animeSources =
         return Response(
           statusCode,
           body: JsonResponse.success(
-            results.map((final EpisodeSource x) => x.toJson()).toList(),
+            results
+                .map(
+                  (final EpisodeSource x) => x.toJson()
+                    ..addAll(<dynamic, dynamic>{
+                      'proxied_url': getProxiedURL(x.url, x.headers),
+                    }),
+                )
+                .toList(),
           ),
           headers: headers,
         );

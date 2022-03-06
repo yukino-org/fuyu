@@ -25,4 +25,5 @@ class ContentType {
 
   static const ContentType json = ContentType('application/json');
   static const ContentType html = ContentType('text/html');
+  static const ContentType png = ContentType('image/png');
 }

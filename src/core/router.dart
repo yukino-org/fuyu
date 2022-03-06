@@ -4,11 +4,13 @@ import '../routes/anime/info.dart';
 import '../routes/anime/search.dart';
 import '../routes/anime/sources.dart';
 import '../routes/docs.dart';
+import '../routes/favicon.dart';
 import '../routes/manga/chapter.dart';
 import '../routes/manga/info.dart';
 import '../routes/manga/page.dart';
 import '../routes/manga/search.dart';
 import '../routes/ping.dart';
+import '../routes/proxy.dart';
 import '../tools/docs/api.dart';
 
 export 'package:shelf_router/shelf_router.dart';
@@ -35,7 +37,9 @@ class RouteManager {
     mangaChapter,
     mangaPage,
     docs,
+    favicon,
     ping,
+    proxy,
   ];
 
   static Future<RouteManager> createRouter() async {

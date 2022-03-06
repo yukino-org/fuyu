@@ -7,4 +7,5 @@ final SchemaDataType episodeSourceSchemaDataType =
   'quality': SchemaDataType.string(),
   'headers': httpHeadersSchemaDataType,
   'locale': SchemaDataType.string(),
+  'proxied_url': SchemaDataType.string(),
 });

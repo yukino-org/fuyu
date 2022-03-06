@@ -1,22 +1,26 @@
-import 'dart:io';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
+import 'commands/help.dart';
 import 'core/app.dart';
 import 'core/args.dart';
 import 'core/router.dart';
 import 'tools/logger.dart';
 
 Future<void> main(final List<String> args) async {
+  if (HelpCommand.isHelpCommand(args)) {
+    HelpCommand.instance.printUsage();
+    return;
+  }
+
   AppManager.argResults = argParser.parse(args);
   await AppManager.initialize();
   Logger.debug('main: Initialized AppManager');
 
-  final InternetAddress host =
-      InternetAddress(AppManager.argResults['host'] as String);
-  Logger.debug('main: host - ${host.host}');
-
-  final int port = int.parse(AppManager.argResults['port'] as String);
-  Logger.debug('main: port - $port');
+  AppManager.address = ServerAddress(
+    AppManager.argResults['protocol'] as String,
+    AppManager.argResults['host'] as String,
+    int.parse(AppManager.argResults['port'] as String),
+  );
 
   AppManager.router = await RouteManager.createRouter();
   Logger.debug('main: Created router');
@@ -39,15 +43,14 @@ Future<void> main(final List<String> args) async {
   Logger.debug('main: Prepared handler');
 
   if (AppManager.argResults['listen'] as bool) {
-    AppManager.server = await serve(handler, host, port);
-    Logger.debug('main: Started server');
+    AppManager.server = await serve(
+      handler,
+      AppManager.address.host,
+      AppManager.address.port,
+    );
 
-    Logger.info(
-      'server: Serving at http://${AppManager.server.address.host}:${AppManager.server.port}/',
-    );
+    Logger.info('server: Serving at ${AppManager.address.url}');
   } else {
-    Logger.warn(
-      'server: On mock mode due to --no-listen flag',
-    );
+    Logger.warn('server: On mock mode due to --no-listen flag');
   }
 }
