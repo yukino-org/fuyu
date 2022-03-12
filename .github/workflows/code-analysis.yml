@@ -18,7 +18,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    dart-analyze:
+    analyze:
         runs-on: ubuntu-latest
 
         steps:
