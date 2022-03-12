@@ -10,6 +10,7 @@ env:
     EXE_NAME: fuyu
     INPUT_PATH: src/main.dart
     DART_SDK: beta
+    OUTPUT_EXE_PATH: bin/${{ env.EXE_NAME }}
 
 jobs:
     build:
@@ -20,8 +21,6 @@ jobs:
                     - ubuntu-latest
                     - windows-latest
                     - macOS-latest
-        env:
-            OUTPUT_EXE_PATH: bin/${{ env.EXE_NAME }}
         steps:
             - uses: actions/checkout@v2
 
