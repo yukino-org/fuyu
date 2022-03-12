@@ -25,7 +25,8 @@ jobs:
             - uses: actions/checkout@v2
 
             - uses: dart-lang/setup-dart@v1
-              sdk: ${{ env.DART_SDK }}
+              with:
+                  sdk: ${{ env.DART_SDK }}
 
             - name: 🚧 Do prerequisites
               run: |
