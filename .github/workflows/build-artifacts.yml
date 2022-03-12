@@ -13,33 +13,31 @@ env:
 
 jobs:
     build:
-        strategy:
-        matrix:
-            os:
-                - ubuntu-latest
-                - windows-latest
-                - macOS-latest
-
         runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os:
+                    - ubuntu-latest
+                    - windows-latest
+                    - macOS-latest
         env:
             OUTPUT_EXE_PATH: bin/${{ env.EXE_NAME }}
-
         steps:
             - uses: actions/checkout@v2
 
             - uses: dart-lang/setup-dart@v1
-              sdk: ${{ env.DART_SDK }}
+            sdk: ${{ env.DART_SDK }}
 
             - name: 🚧 Do prerequisites
-              run: |
-                  dart pub get
-                  dart run ./cli/generate_meta.dart
+            run: |
+                dart pub get
+                dart run ./cli/generate_meta.dart
 
             - name: 👷 Build executable
-              run: dart compile exe -o ${{ env.OUTPUT_EXE_PATH }} ${{ env.INPUT_PATH }}
+            run: dart compile exe -o ${{ env.OUTPUT_EXE_PATH }} ${{ env.INPUT_PATH }}
 
             - name: 🚀 Upload artifact
-              uses: actions/upload-artifact@v3
-              with:
-                  name: ${{ env.EXE_NAME }}
-                  path: ${{ env.OUTPUT_EXE_PATH }}
+            uses: actions/upload-artifact@v3
+            with:
+                name: ${{ env.EXE_NAME }}
+                path: ${{ env.OUTPUT_EXE_PATH }}
