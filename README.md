@@ -6,6 +6,8 @@
 
 🏂 A self-hostable rest api server for [Tenka](https://github.com/yukino-org/tenka-store).
 
+By using this project, you agree to the [usage policy](https://yukino-org.github.io/wiki/tenka/disclaimer/).
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code Analysis](https://github.com/yukino-org/fuyu/actions/workflows/code-analysis.yml/badge.svg)](https://github.com/yukino-org/fuyu/actions/workflows/code-analysis.yml)
 
