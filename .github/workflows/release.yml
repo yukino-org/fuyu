@@ -1,4 +1,4 @@
-name: Build (Artifacts)
+name: Release
 
 on:
     push:
@@ -11,6 +11,9 @@ env:
     DART_SDK: beta
     INPUT_PATH: src/main.dart
     OUTPUT_EXE_DIR: bin
+    DEPLOY_BRANCH_PREFIX: dist
+    GIT_CONFIG_NAME: "[Automated] Yui"
+    GIT_CONFIG_EMAIL: yukino-org@users.noreply.github.com
 
 jobs:
     build:
@@ -33,9 +36,19 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { getExecutableName } = require("cli/actions/executable_name");
+                      const { getExecutableName } = require("./cli/actions/executable_name");
                       const executableName = await getExecutableName();
                       return executableName;
+
+            - uses: actions/github-script@v6
+              id: commit-msg
+              with:
+                  result-encoding: string
+                  script: |
+                      const { getVersion } = require("./cli/actions/version");
+                      const version = await getVersion();
+
+                      return "[automated] v${version} (${{ github.sha }})";
 
             - uses: actions/github-script@v6
               id: platform-name
@@ -53,8 +66,11 @@ jobs:
             - name: 👷 Build executable
               run: dart compile exe -o ${{ steps.exe-path.outputs.result }} ${{ env.INPUT_PATH }}
 
-            - name: 🚀 Upload artifact
-              uses: actions/upload-artifact@v3
+            - name: 🚀 Release executables
+              uses: JamesIves/github-pages-deploy-action@4.1.4
               with:
-                  name: ${{ env.APP_NAME }}-${{ steps.platform-name.outputs.result }}
-                  path: ${{ steps.exe-path.outputs.result }}
+                  git-config-name: ${{ env.GIT_CONFIG_NAME }}
+                  git-config-email: ${{ env.GIT_CONFIG_EMAIL }}
+                  folder: ${{ env.OUTPUT_EXE_DIR }}
+                  branch: ${{ env.DEPLOY_BRANCH_PREFIX }}-${{ steps.platform-name.outputs.result }}
+                  commit-message: ${{ steps.commit-msg.outputs.result }}
