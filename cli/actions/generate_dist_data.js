@@ -2,7 +2,7 @@ const { promises: fs } = require("fs");
 const path = require("path");
 const { getVersion } = require("./version");
 
-const generateData = () => {
+const generateData = async () => {
     const version = await getVersion();
     const dataDir = path.resolve(__dirname, "../../dist/badge-endpoint.json");
 
