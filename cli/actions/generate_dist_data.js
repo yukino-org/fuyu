@@ -4,8 +4,9 @@ const { getVersion } = require("./version");
 
 const generateData = async () => {
     const version = await getVersion();
-    const dataDir = path.resolve(__dirname, "../../dist/badge-endpoint.json");
+    const dataDir = path.resolve(__dirname, "../../dist");
 
+    await fs.mkdir(dataDir, { recursive: true });
     await fs.writeFile(
         path.join(dataDir, "badge-endpoint.json"),
         JSON.stringify({
@@ -15,7 +16,6 @@ const generateData = async () => {
             color: "blue",
         })
     );
-
     await fs.writeFile(path.join(dataDir, "version.txt"), version);
 
     return dataDir;
