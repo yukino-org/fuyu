@@ -79,4 +79,4 @@ jobs:
                   git checkout ${{ env.DEPLOY_BRANCH }} || git checkout -b ${{ env.DEPLOY_BRANCH }}
                   git add .
                   git commit -m "${{ steps.commit-msg.outputs.result }}"
-                  git push -u origin ${{ env.DEPLOY_BRANCH }}
+                  git push -u origin ${{ env.DEPLOY_BRANCH }} --force
