@@ -111,7 +111,7 @@ packages:
     description:
       path: "."
       ref: dart_devx
-      resolved-ref: fd4d70ed67925465e416a6705b29c51c73c1973f
+      resolved-ref: "0e184b5a87e228d8920e77b483d35861d2f7f2d3"
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "0.0.0"
@@ -307,11 +307,9 @@ packages:
   puppeteer:
     dependency: transitive
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: fbf0746f1f460dae272c9817f9023c6c2040db07
-      url: "git://github.com/xvrh/puppeteer-dart.git"
-    source: git
+      name: puppeteer
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "2.6.0"
   quiver:
     dependency: transitive
@@ -409,7 +407,7 @@ packages:
     description:
       path: "."
       ref: dart_tenka
-      resolved-ref: f508a2549fef29b3e0b82ad22fa3291530827a90
+      resolved-ref: eec72fb53f857e1920ea243f799fe279dfae14ce
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "1.0.5"
@@ -418,7 +416,7 @@ packages:
     description:
       path: "."
       ref: dart_tenka_runtime
-      resolved-ref: defd641706c052015b706a848f5cfe80141e01d5
+      resolved-ref: c455964f4b9483835e202915b4d26ac9908e456a
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "0.0.0"
@@ -462,7 +460,7 @@ packages:
     description:
       path: "."
       ref: dart_utilx
-      resolved-ref: "29204f732f4d143457df4d45e9331d8fd1fe5b46"
+      resolved-ref: a86442540293261f9b6e44e04a9eeadd9d09c55f
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "0.0.0"
@@ -471,7 +469,7 @@ packages:
     description:
       path: "."
       ref: dart_utilx_desktop
-      resolved-ref: f169907eb28c3b06e40451af86a74bdb86c8e2e1
+      resolved-ref: "4a49863c6d920178dae5b9d476dddc131bb888a8"
       url: "git://github.com/yukino-org/packages.git"
     source: git
     version: "0.0.0"
