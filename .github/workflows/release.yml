@@ -48,7 +48,7 @@ jobs:
                       const { getVersion } = require("./cli/actions/version");
                       const version = await getVersion();
 
-                      return "[automated] v${version} (${{ github.sha }})";
+                      return `[automated] v${version} (${{ github.sha }})`;
 
             - uses: actions/github-script@v6
               id: platform-name
