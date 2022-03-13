@@ -29,6 +29,14 @@ jobs:
                   sdk: ${{ env.DART_SDK }}
 
             - uses: actions/github-script@v6
+              id: platform-name
+              with:
+                  result-encoding: string
+                  script: |
+                      const { getPlatform } = require("cli/actions/platform");
+                      return getPlatform();
+
+            - uses: actions/github-script@v6
               id: exe-path
               with:
                   result-encoding: string
@@ -36,14 +44,6 @@ jobs:
                       const { getExecutableName } = require("cli/actions/executable_name");
                       const executableName = await getExecutableName();
                       return executableName;
-
-            - uses: actions/github-script@v6
-              id: platform-name
-              with:
-                  result-encoding: string
-                  script: |
-                      const { platform } = require("os");
-                      return platform();
 
             - name: 🚧 Do prerequisites
               run: |
