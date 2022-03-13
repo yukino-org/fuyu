@@ -67,10 +67,12 @@ jobs:
               run: dart compile exe -o ${{ steps.exe-path.outputs.result }} ${{ env.INPUT_PATH }}
 
             - name: 🚀 Release executables
-              uses: JamesIves/github-pages-deploy-action@4.1.4
-              with:
-                  git-config-name: ${{ env.GIT_CONFIG_NAME }}
-                  git-config-email: ${{ env.GIT_CONFIG_EMAIL }}
-                  folder: ${{ env.OUTPUT_EXE_DIR }}
-                  branch: ${{ env.DEPLOY_BRANCH_PREFIX }}-${{ steps.platform-name.outputs.result }}
-                  commit-message: ${{ steps.commit-msg.outputs.result }}
+              working-directory: ${{ env.OUTPUT_EXE_DIR }}
+              run: |
+                  git init
+                  git config --local user.name "${{ env.GIT_CONFIG_NAME }}"
+                  git config --local user.email "${{ env.GIT_CONFIG_EMAIL }}"
+                  git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+                  git add .
+                  git commit -m "${{ steps.commit-msg.outputs.result }}"
+                  git push -u origin ${{ env.DEPLOY_BRANCH_PREFIX }}-${{ steps.platform-name.outputs.result }}
