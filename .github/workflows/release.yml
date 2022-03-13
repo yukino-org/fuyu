@@ -68,11 +68,14 @@ jobs:
 
             - name: 🚀 Release executables
               working-directory: ${{ env.OUTPUT_EXE_DIR }}
+              env:
+                  GIT_ORIGIN_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+                  DEPLOY_BRANCH: ${{ env.DEPLOY_BRANCH_PREFIX }}-${{ steps.platform-name.outputs.result }}
               run: |
                   git init
                   git config --local user.name "${{ env.GIT_CONFIG_NAME }}"
                   git config --local user.email "${{ env.GIT_CONFIG_EMAIL }}"
-                  git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+                  git remote add origin ${{ env.GIT_ORIGIN_URL }}
                   git add .
                   git commit -m "${{ steps.commit-msg.outputs.result }}"
-                  git push -u origin ${{ env.DEPLOY_BRANCH_PREFIX }}-${{ steps.platform-name.outputs.result }}
+                  git push -u origin ${{ env.DEPLOY_BRANCH }}
