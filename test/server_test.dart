@@ -83,7 +83,7 @@ void main() {
               final AnimeInfo result =
                   AnimeInfo.fromJson(data as Map<dynamic, dynamic>);
 
-              urls['episode'] = result.sortedEpisodes.first.url;
+              urls['episode'] = result.episodes.first.url;
             },
           ),
         ),
@@ -162,7 +162,7 @@ void main() {
               final MangaInfo result =
                   MangaInfo.fromJson(data as Map<dynamic, dynamic>);
 
-              urls['chapter'] = result.sortedChapters.first.url;
+              urls['chapter'] = result.chapters.first.url;
             },
           ),
         ),
