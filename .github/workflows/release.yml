@@ -56,7 +56,7 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { getPlatform } = require("cli/actions/platform");
+                      const { getPlatform } = require("./cli/actions/platform");
                       return getPlatform();
 
             - name: 🚧 Do prerequisites
@@ -93,7 +93,7 @@ jobs:
               with:
                   result-encoding: string
                   script: |
-                      const { generateData } = require("cli/actions/generate_dist_data");
+                      const { generateData } = require("./cli/actions/generate_dist_data");
                       const dataDir = await generateData();
                       return dataDir;
 
