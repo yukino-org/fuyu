@@ -15,20 +15,20 @@ dependencies:
     shelf_router: ^1.0.0
     tenka:
         git:
-            url: git://github.com/yukino-org/packages.git
+            url: https://github.com/yukino-org/packages.git
             ref: dart_tenka
     utilx:
         git:
-            url: git://github.com/yukino-org/packages.git
+            url: https://github.com/yukino-org/packages.git
             ref: dart_utilx
     utilx_desktop:
         git:
-            url: git://github.com/yukino-org/packages.git
+            url: https://github.com/yukino-org/packages.git
             ref: dart_utilx_desktop
 
 dev_dependencies:
     devx:
         git:
-            url: git://github.com/yukino-org/packages.git
+            url: https://github.com/yukino-org/packages.git
             ref: dart_devx
     test: ^1.15.0
