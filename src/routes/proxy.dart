@@ -46,7 +46,7 @@ final RouteFactory proxy =
   }
 });
 
-String getProxiedURL(final String url, final Map<String, String> headers) =>
+String? getProxiedURL(final String url, final Map<String, String> headers) =>
     AppManager.argResults['proxy'] as bool
         ? AppManager.address.uri.replace(
             path: '/proxy',
@@ -55,7 +55,7 @@ String getProxiedURL(final String url, final Map<String, String> headers) =>
               'url': url,
             },
           ).toString()
-        : '';
+        : null;
 
 DLProvider _getProvider(final String url) {
   if (url.contains('.m3u8')) return const M3U8DLProvider();

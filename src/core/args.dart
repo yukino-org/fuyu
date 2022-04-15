@@ -16,5 +16,5 @@ final ArgParser argParser = ArgParser()
   )
   ..addFlag('suppress')
   ..addFlag('docs', defaultsTo: true)
-  ..addFlag('proxy', defaultsTo: true)
+  ..addFlag('proxy')
   ..addFlag('listen', hide: true, defaultsTo: true);

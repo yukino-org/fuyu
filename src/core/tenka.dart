@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:tenka/tenka.dart';
 import 'package:utilx_desktop/webview/puppeteer/provider.dart';
-import '../config/constants.dart';
 import '../config/paths.dart';
 import 'app.dart';
 
@@ -41,8 +40,7 @@ abstract class TenkaManager {
     }
 
     repository = TenkaRepository(
-      resolver:
-          const TenkaStoreURLResolver(deployMode: Constants.tenkaStoreRef),
+      resolver: const TenkaStoreURLResolver(),
       baseDir: Paths.tenka,
     );
 

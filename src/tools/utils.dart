@@ -33,7 +33,8 @@ class TenkaQuery<T> {
       }
     } else {}
 
-    final String? moduleName = request.url.queryParameters[moduleKey];
+    final String? moduleName =
+        request.url.queryParameters[moduleKey]?.toLowerCase();
     if (moduleName == null) {
       return ResponseUtils.missingQuery(moduleKey);
     }
