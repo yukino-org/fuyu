@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:tenka/tenka.dart';
-import 'package:utilx_desktop/webview/puppeteer/provider.dart';
 import '../config/paths.dart';
 import 'app.dart';
 
@@ -22,13 +21,9 @@ abstract class TenkaManager {
 
   static Future<void> initialize() async {
     await TenkaInternals.initialize(
-      runtime: TenkaRuntimeOptions(
-        http: const TenkaRuntimeHttpClientOptions(
+      runtime: const TenkaRuntimeOptions(
+        http: TenkaRuntimeHttpClientOptions(
           ignoreSSLCertificate: true,
-        ),
-        webview: WebviewManagerInitializeOptions(
-          PuppeteerProvider(),
-          WebviewProviderOptions(localChromiumPath: Paths.chromium),
         ),
       ),
     );

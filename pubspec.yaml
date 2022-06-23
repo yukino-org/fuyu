@@ -21,10 +21,6 @@ dependencies:
         git:
             url: https://github.com/yukino-org/packages.git
             ref: dart_utilx
-    utilx_desktop:
-        git:
-            url: https://github.com/yukino-org/packages.git
-            ref: dart_utilx_desktop
 
 dev_dependencies:
     devx:
